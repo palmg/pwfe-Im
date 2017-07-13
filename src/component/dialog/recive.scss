@@ -1,6 +1,6 @@
 .receive{
   position: relative;
-  margin-right: 1.7rem;
+  margin: 0 1.7rem .5rem 0;
   display: flex;
   align-items:center;
 }
@@ -12,6 +12,7 @@
   border-radius: 50%;
 }
 .chat{
+  margin: 0;
   max-width: 14rem;
   padding: .5rem .8rem;
   background: #FFFFFF;

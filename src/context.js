@@ -15,9 +15,19 @@ export const ImState = {
 
 /**
  * 聊天信息内容
- * @type {{receive: number, send: number}}
+ * @type {{time: number, receive: number, send: number}}
  */
 export const chatType = {
+    time: 3, //时间标记
     receive: 1, //接收的数据
     send: 2 //发送的数据
+}
+
+/**
+ * UI显示效果全局配置
+ * @type {{mastShowTime: number, timeShowInterval: number}}
+ */
+export const UI = {
+    mastShowTime: 1500, //聊天窗口出现时默认加载时间，单位毫秒
+    timeShowInterval: 1000 * 60 * 3 //聊天窗口间隔时间，单位毫秒
 }

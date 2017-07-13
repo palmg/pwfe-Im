@@ -3,8 +3,9 @@
  */
 
 import React from 'react'
-import Recive from './dialog/receive'
+import Receive from './dialog/receive'
 import Send from './dialog/send'
+import Time from './dialog/time'
 import {chatType} from '../context'
 const cn = require('classnames/bind').bind(require('./dialog.scss'))
 
@@ -43,10 +44,12 @@ class Dialog extends React.Component{
             <div className={cn('dialog')} ref={ref=>{this.dom = ref}}>
                 {chatList && chatList.map(i=>{
                     switch (i.type){
+                        case chatType.time:
+                            return <Time key={`Time${i.timestamp}`} time={i.msg}/>
                         case chatType.receive:
-                            return <Recive key={i.timestamp} user={user} chat={i.msg} timestamp={i.timestamp} />
+                            return <Receive key={`Receive${i.timestamp}`} user={user} chat={i.msg} timestamp={i.timestamp} />
                         default:
-                            return <Send key={i.timestamp} chat={i.msg} timestamp={i.timestamp}/>
+                            return <Send key={`Send${i.timestamp}`} chat={i.msg} timestamp={i.timestamp}/>
                     }
                 })}
             </div>

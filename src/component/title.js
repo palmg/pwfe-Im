@@ -26,7 +26,7 @@ class Title extends React.Component {
     }
 
     closeHandle(e) {
-        const close = this.props.onclose
+        const close = this.props.onClose
         close && close()
     }
 

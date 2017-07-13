@@ -6,7 +6,8 @@ import React from 'react'
 import Title from './title'
 import Dialog from './dialog'
 import Action from './action'
-import {chatType} from '../context'
+import Loading from './loading'
+import {chatType, UI} from '../context'
 const cn = require('classnames/bind').bind(require('./chatFrame.scss'))
 
 /**
@@ -27,41 +28,81 @@ class ChatFrame extends React.Component {
     constructor(...props) {
         super(...props)
         this.state = {
-            list: [] //消息列表，结构为[{type, msg, timestamp}]
+            list: [], //消息列表，结构为[{type, msg, timestamp}]
+            mask: true
         }
+        this.lastTimeBox = 0
         this.onMsg = this.onMsg.bind(this)
         this.sendMsg = this.sendMsg.bind(this)
         this.props.setOnMsg(this.onMsg)
     }
 
-    onMsg(msg, timestamp) {//接收消息
-        this.setState({
-            list: this.state.list.concat([{
-                type: chatType.receive,
-                msg: msg,
-                timestamp: timestamp
-            }])
+    componentWillReceiveProps(nextProps) {
+        this.props.mask !== nextProps.mask && !nextProps.mask && (() => {
+            this.mask = true //标记外部传入了移除mask的消息
+            this.closeMask()
+        })()
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        return (nextState.mask !== this.state.mask && !nextState.mask) ||
+            (this.state.list !== nextState.list)
+    }
+
+    componentDidMount() {
+        const timer = setTimeout(() => {
+            this.timer = true //标记计数器计算完成
+            this.closeMask()
+            clearTimeout(timer)
+        }, UI.mastShowTime)
+    }
+
+    closeMask() {
+        this.timer && this.mask && this.setState({
+            mask: false
         })
+    }
+
+    onMsg(msg, timestamp) {//接收消息
+        this.addChatLabel(chatType.receive, msg, timestamp)
     }
 
     sendMsg(msg, timestamp) { //向外发送消息
         this.props.send(msg, timestamp)
-        this.setState({
-            list: this.state.list.concat([{
-                type: chatType.send,
-                msg: msg,
+        this.addChatLabel(chatType.send, msg, timestamp)
+    }
+
+    addChatLabel(type, msg, timestamp) {
+        const list = this.state.list,
+            tempList = []
+        timestamp - this.lastTimeBox > UI.timeShowInterval && (() => {
+            this.lastTimeBox = timestamp
+            const date = new Date(timestamp)
+            tempList.push({
+                type: chatType.time,
+                msg:`${('' + date.getFullYear()).substring(2)}.${date.getDate()} ${date.getHours()}:${date.getMinutes()}`,
                 timestamp: timestamp
-            }])
+            })
+        })()
+        tempList.push({
+            type: type,
+            msg:msg,
+            timestamp:timestamp
+        })
+
+        this.setState({
+            list: this.state.list.concat(tempList)
         })
     }
 
     render() {
-        const user = this.props.user
+        const {user, onClose} = this.props
         return (
             <div className={cn('chat-frame')}>
-                <Title user={user}/>
+                <Title user={user} onClose={onClose}/>
                 <Dialog user={user} chatList={this.state.list}/>
                 <Action onSend={this.sendMsg}/>
+                {this.state.mask && <Loading />}
             </div>
         )
     }
