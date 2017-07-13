@@ -45,7 +45,7 @@ class Demo extends React.Component {
                     avatar: 'https://file.mahoooo.com/res/file/20170301104952MPDRQN0N2A6QW2L2ZJF6BE995909CE55C7A72876DEE5C6FAE4F5E3@54w_80Q',
                     name: '不高兴',
                     id: '123'
-                }} url="ws://localhost:8181" onClose={this.cancelHandle}/>)}
+                }} url="ws://localhost:8181/123456/name/" onClose={this.cancelHandle}/>)}
             </div>
         )
     }
