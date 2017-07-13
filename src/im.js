@@ -46,7 +46,7 @@ class Im extends React.Component {
 
     componentWillUnmount(){
         this.socket.close()
-        this.setState({stu: ImState.closing})
+        //this.setState({stu: ImState.closing})
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -67,7 +67,7 @@ class Im extends React.Component {
     }
 
     socketCloseHandle(e) {//close webSocket connect
-        this.setState({stu: ImState.closed})
+        //this.setState({stu: ImState.closed})
     }
 
     sendHandle(msg, timestamp) {//send message to server

@@ -4,8 +4,9 @@
   "description": "即时通信工具",
   "main": "index.js",
   "scripts": {
+    "server":"node ./demo/server/index.js",
     "demo": "webpack-dev-server --progress --colors --inline --config ./demo/webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "babel": "grunt && babel ./src/ -d ./lib/"
   },
   "repository": {
     "type": "git",

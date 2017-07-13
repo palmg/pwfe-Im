@@ -4,7 +4,7 @@
 
 import React from 'react'
 import {render} from 'react-dom'
-import Im from '../src/im'
+import Im from '../index'
 import './demo.scss'
 
 class Demo extends React.Component {
@@ -41,11 +41,11 @@ class Demo extends React.Component {
         return (
             <div>
                 <button onClick={this.popHandle}>点我蹦出聊天窗口</button>
-                <Im show={this.state.show} user={{
+                {this.state.show && (<Im user={{
                     avatar: 'https://file.mahoooo.com/res/file/20170301104952MPDRQN0N2A6QW2L2ZJF6BE995909CE55C7A72876DEE5C6FAE4F5E3@54w_80Q',
                     name: '不高兴',
                     id: '123'
-                }} url="ws://localhost:8181" onClose={this.cancelHandle}/>
+                }} url="ws://localhost:8181" onClose={this.cancelHandle}/>)}
             </div>
         )
     }
