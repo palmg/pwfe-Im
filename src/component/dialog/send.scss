@@ -1,0 +1,31 @@
+.send {
+  position: relative;
+  padding: 0 .8rem 0 2.5rem;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.chat {
+  max-width: 14rem;
+  word-break: break-all;
+  padding: .5rem .8rem;
+  background: #6092E0;
+  border-radius: 3px;
+  font-size: .6rem;
+  color: #FFFFFF;
+  line-height: 1.2rem;
+}
+
+.arrow {
+  position: absolute;
+  z-index: 3;
+  transform: rotate(45deg);
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  right: .5rem;
+  width: .6rem;
+  height: .6rem;
+  background: #6092E0;
+}

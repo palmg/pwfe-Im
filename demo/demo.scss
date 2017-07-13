@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+html {
+  position: relative;
+  font-size: 20px; /*由于chrome内核的浏览器最小标定字体为12px因此使用1rem=20px来换算布局大小*/
+  height: 100%;
+  * {
+    box-sizing: border-box; //全局使用盒模型
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-family: Microsoft YaHei, PingFangSC-Regular, Arial, sans-serif;
+  font-size: .7rem;//默认字体大小
+  color: #555555;
+  height: 100%;
+  overflow: hidden;
+}

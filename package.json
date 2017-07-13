@@ -1,0 +1,52 @@
+{
+  "name": "pwfe-im",
+  "version": "1.0.0",
+  "description": "即时通信工具",
+  "main": "index.js",
+  "scripts": {
+    "demo": "webpack-dev-server --progress --colors --inline --config ./demo/webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/palmg/pwfe-Im.git"
+  },
+  "keywords": [
+    "react",
+    "palmg",
+    "InstantMessaging"
+  ],
+  "author": "chkui",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/palmg/pwfe-Im/issues"
+  },
+  "homepage": "https://github.com/palmg/pwfe-Im#readme",
+  "dependencies": {
+    "autoprefixer": "^7.1.1",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^6.2.7",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "classnames": "^2.2.5",
+    "css-loader": "^0.26.0",
+    "node-sass": "^4.5.3",
+    "postcss-loader": "^1.2.1",
+    "precss": "^1.4.0",
+    "sass-loader": "^4.0.1",
+    "style-loader": "^0.13.1"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "file-loader": "^0.10.1",
+    "html-loader": "^0.4.4",
+    "html-webpack-plugin": "^2.24.1",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^2.4.5",
+    "ws": "^3.0.0"
+  }
+}

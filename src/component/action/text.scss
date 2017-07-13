@@ -1,0 +1,11 @@
+.text{
+  padding: 1rem;
+  border: 0;
+  width: 100%;
+  height: 70%;
+  resize:none;
+  outline:none;
+  &:focus{
+    border: 0;
+  }
+}
