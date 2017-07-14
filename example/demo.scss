@@ -19,3 +19,19 @@ body {
   height: 100%;
   overflow: hidden;
 }
+
+.btn{
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 8rem;
+  height: 2rem;
+  font-size: .7rem;
+  color: #FFFFFF;
+  background-color: #6092E0;
+  border: 1px solid #EEEEEE;
+  cursor: pointer;
+}

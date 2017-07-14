@@ -5,7 +5,9 @@
 import React from 'react'
 import {render} from 'react-dom'
 import Im from '../index'
-import './demo.scss'
+import style from './demo.scss'
+import cnTool from 'classnames/bind'
+const cn = cnTool.bind(style)
 
 class Demo extends React.Component {
     constructor(...props) {
@@ -32,7 +34,7 @@ class Demo extends React.Component {
     render() {
         return (
             <div>
-                <button onClick={this.popHandle}>点我蹦出聊天窗口</button>
+                <button className={cn('btn')} onClick={this.popHandle}>点我蹦出聊天窗口</button>
                 {this.state.show && (<Im user={user} url={url} onClose={this.cancelHandle}/>)}
             </div>
         )
