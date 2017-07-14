@@ -4,8 +4,8 @@
   "description": "即时通信工具",
   "main": "index.js",
   "scripts": {
-    "server":"node ./demo/server/index.js",
-    "demo": "webpack-dev-server --progress --colors --inline --config ./demo/webpack",
+    "server":"node ./example/server/index.js",
+    "demo": "webpack-dev-server --progress --colors --inline --config ./example/webpack",
     "babel": "grunt && babel ./src/ -d ./lib/"
   },
   "repository": {

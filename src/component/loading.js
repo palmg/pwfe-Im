@@ -3,6 +3,9 @@
  */
 import React from 'react'
 const cn = require('classnames/bind').bind(require('./loading.scss'))
+/**
+ * title
+ */
 class Loading extends React.Component {
     constructor(...props) {
         super(...props)
@@ -41,7 +44,7 @@ class Loading extends React.Component {
             <div className={cn('loading')}>
                 <div className={cn('mask')}/>
                 <div className={cn('name')}>
-                    <p className={cn('text')}>建立链接中</p>
+                    <p className={cn('text')}>{this.props.title}</p>
                     <p className={cn('dot')}>{this.state.t}</p>
                 </div>
             </div>

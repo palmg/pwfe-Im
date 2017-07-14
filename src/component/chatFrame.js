@@ -7,12 +7,12 @@ import Title from './title'
 import Dialog from './dialog'
 import Action from './action'
 import Loading from './loading'
-import {chatType, UI} from '../context'
+import {chatType, UI, ImState} from '../context'
 const cn = require('classnames/bind').bind(require('./chatFrame.scss'))
 
 /**
  * 聊天窗口。
- * @param {boolean} mask 用于标记是否显示遮罩层
+ * @param {object} state 当前外部加载状态，context.ImState中的所有值
  * @param {object} user 聊天对象信息:
  *    {
  *      avatar:用户头像
@@ -29,38 +29,15 @@ class ChatFrame extends React.Component {
         super(...props)
         this.state = {
             list: [], //消息列表，结构为[{type, msg, timestamp}]
-            mask: true
         }
         this.lastTimeBox = 0
-        this.onMsg = this.onMsg.bind(this)
-        this.sendMsg = this.sendMsg.bind(this)
+        this.onMsg = this.onMsg.bind(this) //收到外部消息的回调
+        this.sendMsg = this.sendMsg.bind(this) //发送消息给服务器的方法
         this.props.setOnMsg(this.onMsg)
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.props.mask !== nextProps.mask && !nextProps.mask && (() => {
-            this.mask = true //标记外部传入了移除mask的消息
-            this.closeMask()
-        })()
-    }
-
     shouldComponentUpdate(nextProps, nextState) {
-        return (nextState.mask !== this.state.mask && !nextState.mask) ||
-            (this.state.list !== nextState.list)
-    }
-
-    componentDidMount() {
-        const timer = setTimeout(() => {
-            this.timer = true //标记计数器计算完成
-            this.closeMask()
-            clearTimeout(timer)
-        }, UI.mastShowTime)
-    }
-
-    closeMask() {
-        this.timer && this.mask && this.setState({
-            mask: false
-        })
+        return (nextProps.state !== this.props.state) || (this.state.list !== nextState.list)
     }
 
     onMsg(msg, timestamp) {//接收消息
@@ -72,37 +49,41 @@ class ChatFrame extends React.Component {
         this.addChatLabel(chatType.send, msg, timestamp)
     }
 
-    addChatLabel(type, msg, timestamp) {
+    addChatLabel(type, msg, timestamp) {//向聊天列表增加一条消息
         const list = this.state.list,
             tempList = []
+        //当消息的间隔时间搓大于设定的时间时（UI.timeShowInterval），向消息列表增加时间显示
         timestamp - this.lastTimeBox > UI.timeShowInterval && (() => {
             this.lastTimeBox = timestamp
             const date = new Date(timestamp)
             tempList.push({
                 type: chatType.time,
-                msg:`${('' + date.getFullYear()).substring(2)}.${date.getDate()} ${date.getHours()}:${date.getMinutes()}`,
+                msg: `${('' + date.getFullYear()).substring(2)}.${date.getDate()} ${date.getHours()}:${date.getMinutes()}`,
                 timestamp: timestamp
             })
         })()
+
+        //添加对话消息到消息列表
         tempList.push({
             type: type,
-            msg:msg,
-            timestamp:timestamp
+            msg: msg,
+            timestamp: timestamp
         })
 
+        //更新列表
         this.setState({
             list: this.state.list.concat(tempList)
         })
     }
 
     render() {
-        const {user, onClose} = this.props
+        const {user, onClose, state} = this.props
         return (
             <div className={cn('chat-frame')}>
                 <Title user={user} onClose={onClose}/>
                 <Dialog user={user} chatList={this.state.list}/>
                 <Action onSend={this.sendMsg}/>
-                {this.state.mask && <Loading />}
+                {state !== ImState.connect && <Loading title={state.name}/>}
             </div>
         )
     }

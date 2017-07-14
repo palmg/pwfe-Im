@@ -10,8 +10,10 @@ wss.on('connection', function (ws, req) {
     let url = req.url
     url.startsWith('/') && (url = url.substring(1))
     url.endsWith('/') && (url = url.substring(0, url.length - 1))
-    const urls = url.split('/'),id=urls[0],name=urls[1]
+    const urls = url.split('/')
+    console.log('RestFull params：', urls)
     ws.on('message', function (message) {
+        console.log('get client info:', message)
         const timer = setTimeout(function(){
             ws.send('你给我发送了一条消息：' + message)
             clearTimeout(timer)

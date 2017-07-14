@@ -4,7 +4,7 @@
 
 import React from 'react'
 import ChatFrame from './component/chatFrame'
-import {ImState} from './context'
+import {ImState, disconnect, UI} from './context'
 import {webSocket} from './net/webSocket'
 
 /**
@@ -23,39 +23,35 @@ class Im extends React.Component {
         super(...props)
         this.onMsg = null//子组件获取消息的回调
         this.state = {
-            stu: ImState.closed //标记是否显示对话框
+            stu: ImState.establish //标记是否显示对话框
         }
+        this.fooList = [] //方法处理队列，用于排队处理状态
+        this.timer = null //处理队列的间隔回调对象
         this.sendHandle = this.sendHandle.bind(this)
-
         this.setOnMessage = this.setOnMessage.bind(this)
         this.socketConnectHandle = this.socketConnectHandle.bind(this)
         this.socketMessageHandle = this.socketMessageHandle.bind(this)
-        this.socketCloseHandle = this.socketCloseHandle.bind(this)
+        this.socketDisconnectHandle = this.socketDisconnectHandle.bind(this)
 
         this.socket = webSocket({
             url: this.props.url,
             onConnect: this.socketConnectHandle,
             onMessage: this.socketMessageHandle,
-            onClose: this.socketCloseHandle
+            onDisconnect: this.socketDisconnectHandle
         })
     }
 
     componentDidMount() {
-        this.socketEstablish()
+        this.socket.connect()
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
+        clearInterval(this.timer)
         this.socket.close()
-        //this.setState({stu: ImState.closing})
     }
 
     shouldComponentUpdate(nextProps, nextState) {
         return nextState.stu !== this.state.stu
-    }
-
-    socketEstablish() { //begin establish connect
-        this.setState({stu: ImState.establish})
-        this.socket.connect()
     }
 
     socketConnectHandle(e) {//call after establish connect success
@@ -66,8 +62,24 @@ class Im extends React.Component {
         this.onMsg(msg, new Date().getTime())
     }
 
-    socketCloseHandle(e) {//close webSocket connect
-        //this.setState({stu: ImState.closed})
+    socketDisconnectHandle(code, msg) {//close webSocket connect
+        const _this = this
+        switch (code) {
+            case disconnect.establishErr:
+                this.stateProcess(()=>{
+                    this.setState({stu: ImState.establishError})
+                })
+                break
+            case disconnect.serverCancel:
+                this.stateProcess(() => {
+                    this.setState({stu: ImState.closing})
+                })
+                this.stateProcess(() => {
+                    this.props.onClose()
+                })
+                break
+            default:
+        }
     }
 
     sendHandle(msg, timestamp) {//send message to server
@@ -78,14 +90,24 @@ class Im extends React.Component {
         this.onMsg = foo
     }
 
+    stateProcess(foo) {//状态处理队列
+        const fooList = this.fooList
+        fooList.push(foo)
+        !this.timer && (this.timer = setInterval(() => {
+            const _f = fooList.shift()
+            _f ? _f() : clearInterval(this.timer)
+        }, UI.stateProcessTime))
+    }
+
     render() {
         const {stu} = this.state
-        return stu === ImState.closed || stu === ImState.closing ? (null) :
-            (<ChatFrame mask={stu === ImState.establish}
-                        user={this.props.user}
-                        send={this.sendHandle}
-                        setOnMsg={this.setOnMessage}
-                        onClose={this.props.onClose}/>)
+        return (
+            <ChatFrame state={stu}
+                       user={this.props.user}
+                       send={this.sendHandle}
+                       setOnMsg={this.setOnMessage}
+                       onClose={this.props.onClose}/>
+        )
     }
 }
 

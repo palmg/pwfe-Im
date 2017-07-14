@@ -4,13 +4,14 @@
 
 /**
  * 当前连接状态类型
- * @type {{establish: number, connect: number, closing: number, closed: number}}
+ * @type {{establish: {code: number, name: string}, establishError: {code: number, name: string}, connect: {code: number, name: string}, closing: {code: number, name: string}, closed: {code: number, name: string}}}
  */
 export const ImState = {
-    establish: 1, //建立链接
-    connect: 2, //已经链接
-    closing: 3,//发起关闭链接
-    closed: 4 //链接已经关闭
+    establish: {code: 1, name: '正在创建连接'},
+    establishError: {code: 2, name: '无法创建连接'}, //
+    connect: {code: 3, name: '已经链接'}, //
+    closing: {code: 4, name: '即将关闭链接'},//
+    closed: {code: 5, name: '链接已关闭'} //链接已经关闭
 }
 
 /**
@@ -25,9 +26,18 @@ export const chatType = {
 
 /**
  * UI显示效果全局配置
- * @type {{mastShowTime: number, timeShowInterval: number}}
+ * @type {{stateProcessTime: number, timeShowInterval: number}}
  */
 export const UI = {
-    mastShowTime: 1500, //聊天窗口出现时默认加载时间，单位毫秒
+    stateProcessTime: 1500, //聊天窗口出现时默认加载时间，单位毫秒
     timeShowInterval: 1000 * 60 * 3 //聊天窗口间隔时间，单位毫秒
+}
+
+/**
+ * 服务断线状态
+ * @type {{establishErr: number, serverCancel: number}}
+ */
+export const disconnect = {
+    establishErr: -1, //建立链接失败
+    serverCancel: 1, //服务器主动断开链接
 }
