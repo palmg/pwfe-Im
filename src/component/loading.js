@@ -4,30 +4,27 @@
 import React from 'react'
 const cn = require('classnames/bind').bind(require('./loading.scss'))
 /**
- * title
+ * 加载状态遮罩层
+ * @param {string} title 要显示的内容
  */
 class Loading extends React.Component {
     constructor(...props) {
         super(...props)
-        this.state = {
-            t: '.'
-        }
+        this.state = {dot: '.'}
         this.count = 0
         this.showLine = this.showLine.bind(this)
     }
 
-    showLine() {
+    showLine() {//循环显示...
         this.count = ++this.count % 8
         let ch = '.'
         for(let i = 0;i<this.count;i++){
             ch += '.'
         }
-        this.setState({
-            t:ch
-        })
+        this.setState({dot:ch})
     }
 
-    shouldComponentUpdate(nextProps, nextState){
+    shouldComponentUpdate(nextProps, nextState){//防止非相关执行差异算法
         return this.state !== nextState
     }
 
@@ -45,7 +42,7 @@ class Loading extends React.Component {
                 <div className={cn('mask')}/>
                 <div className={cn('name')}>
                     <p className={cn('text')}>{this.props.title}</p>
-                    <p className={cn('dot')}>{this.state.t}</p>
+                    <p className={cn('dot')}>{this.state.dot}</p>
                 </div>
             </div>
         )

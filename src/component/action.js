@@ -7,7 +7,7 @@ import Text from './action/text'
 const cn = require('classnames/bind').bind(require('./action.scss'))
 
 /**
- * 用户操作框
+ * 下方的操作框
  * @param {function} onSend:(msg, timestamp)=>{msg:发送的消息，timestamp:时间搓}
  */
 class Action extends React.Component {

@@ -15,7 +15,6 @@ const cn = require('classnames/bind').bind(require('./dialog.scss'))
  *   {
  *      avatar:用户头像
  *      name:用户昵称
- *      id:用户对应的标记id
  *    }
  * @param {array} chatList 聊天的列表信息:
  * [{
@@ -30,10 +29,10 @@ class Dialog extends React.Component{
     }
 
     shouldComponentUpdate(nextProps){
-        return this.props.chatList !== nextProps.chatList
+        return this.props.chatList !== nextProps.chatList //只有聊天列表变更时才出现执行比对更新
     }
 
-    componentDidUpdate(prevProps, prevState){
+    componentDidUpdate(prevProps, prevState){ //保持右侧的滚动条一直在最下方
         const {dom} = this
         dom.scrollTop = dom.scrollHeight
     }

@@ -22,7 +22,7 @@ class Title extends React.Component {
     }
 
     static shouldComponentUpdate(){
-        return false
+        return false //任何情况都不执行比对算法
     }
 
     closeHandle(e) {
