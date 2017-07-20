@@ -3,6 +3,15 @@
  */
 
 /**
+ * socket链接类型
+ * @type {{standard: number, socketIo: number}}
+ */
+export const SocketType = {
+    standard:1, //标准的html5模式，使用浏览器底层的websocket接口
+    socketIo:2 //socketIO模式，使用https://socket.io/ 实现，更好的兼容性
+}
+
+/**
  * 当前连接状态类型
  * @type {{establish: {code: number, name: string}, establishError: {code: number, name: string}, connect: {code: number, name: string}, closing: {code: number, name: string}, closed: {code: number, name: string}}}
  */

@@ -1,10 +1,10 @@
 {
   "name": "pwfe-im",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "即时通信工具",
   "main": "index.js",
   "scripts": {
-    "server":"node ./example/server/index.js",
+    "server": "node ./example/server/index.js",
     "demo": "webpack-dev-server --progress --colors --inline --config ./example/webpack",
     "babel": "grunt && babel ./src/ -d ./lib/"
   },
@@ -35,6 +35,7 @@
     "postcss-loader": "^1.2.1",
     "precss": "^1.4.0",
     "sass-loader": "^4.0.1",
+    "socket.io-client": "^2.0.3",
     "style-loader": "^0.13.1"
   },
   "devDependencies": {

@@ -79,9 +79,9 @@ class ChatFrame extends React.Component {
     }
 
     render() {
-        const {user, onClose, state} = this.props
+        const {style, className, user, onClose, state} = this.props
         return (
-            <div className={cn('chat-frame')}>
+            <div style={style} className={cn('chat-frame', className)}>
                 <Title user={user} onClose={onClose}/>
                 <Dialog user={user} chatList={this.state.list}/>
                 <Action onSend={this.sendMsg}/>

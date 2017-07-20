@@ -20,7 +20,7 @@ body {
   overflow: hidden;
 }
 
-.btn{
+.btn-box{
   position: absolute;
   margin: auto;
   top: 0;
@@ -28,8 +28,12 @@ body {
   left: 0;
   right: 0;
   width: 8rem;
-  height: 2rem;
+  height: 4rem;
   font-size: .7rem;
+}
+.btn{
+  width: 8rem;
+  height: 2rem;
   color: #FFFFFF;
   background-color: #6092E0;
   border: 1px solid #EEEEEE;
