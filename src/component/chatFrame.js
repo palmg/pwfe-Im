@@ -12,13 +12,18 @@ const cn = require('classnames/bind').bind(require('./chatFrame.scss'))
 
 /**
  * 聊天窗口。
- * @param {object} state 当前外部加载状态，context.ImState中的所有值
+ * @param {object} state 当前外部加载状态，context.ImState中的所有值。
+ * @param {array} chatList 聊天列表，用于在窗口创建只时候就显示聊天内容。结构为:[{
+ *      type: ['receive'|'send'] receive表示接受到的消息，send表示本地发送出去的消息
+ *      msg: '' 消息内容
+ *      timestamp: 时间搓
+ * }]。可以通过重新设定这个列表改变聊天内容，注意数据突变
  * @param {object} user 聊天对象信息:
  *    {
  *      avatar:用户头像
  *      name:用户昵称
  *      id:用户对应的标记id
- *    }
+ *    }。可以通过重新设定这个数据改变聊天对象信息，注意数据突变
  * @param {function} send 用于发送消息 send(msg,timestamp),在内部触发
  * @param {function} setOnMsg 用于设置获取消息的回调函数，结构为：
  *  setOnMsg((msg,timestamp)=>{//msg:消息内容，timestamp:时间搓})。
@@ -27,18 +32,31 @@ const cn = require('classnames/bind').bind(require('./chatFrame.scss'))
 class ChatFrame extends React.Component {
     constructor(...props) {
         super(...props)
+        const params = this.props
         this.state = {
             list: [], //消息列表，结构为[{type, msg, timestamp}]
         }
-        this.lastTimeBox = 0
+        this.lastTimeBox = 0 //最后一次添加消息框的位置
         this.onMsg = this.onMsg.bind(this) //收到外部消息的回调
         this.sendMsg = this.sendMsg.bind(this) //发送消息给服务器的方法
-        this.props.setOnMsg(this.onMsg)
+        params.setOnMsg && params.setOnMsg(this.onMsg)
     }
 
     shouldComponentUpdate(nextProps, nextState) {
         //只有消息列表发送变更时才进行比对算法,确保list不会发生数据突变
-        return (this.props.state !== nextProps.state) || (this.state.list !== nextState.list)
+        const props = this.props
+        return (props.user !== nextState.user) ||
+            (props.state !== nextProps.state) ||
+            (this.state.list !== nextState.list)
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.props.chatList !== nextProps.chatList && this.setChatList(nextProps.chatList)
+    }
+
+    componentDidMount(){
+        const chatList = this.props.chatList
+        chatList && this.setChatList(chatList)
     }
 
     onMsg(msg, timestamp) {//接收消息
@@ -46,18 +64,27 @@ class ChatFrame extends React.Component {
     }
 
     sendMsg(msg, timestamp) { //向外发送消息
-        this.props.send(msg, timestamp)
+        const send = this.props.send
+        send && send(msg, timestamp)
         this.addChatLabel(chatType.send, msg, timestamp)
     }
 
-    addChatLabel(type, msg, timestamp) {//向聊天列表增加一条消息
-        const list = this.state.list,
-            tempList = []
+    setChatList(chatList) { //处理外部传入的聊天列表
+        const showList = []
+        for(let chat of chatList){
+            this.processOneChat(showList, chatType[chat.type], chat.msg, chat.timestamp)
+        }
+        this.setState({
+            list: showList
+        })
+    }
+
+    processOneChat(list, type, msg, timestamp) {
         //当消息的间隔时间搓大于设定的时间时（UI.timeShowInterval），向消息列表增加时间显示
         timestamp - this.lastTimeBox > UI.timeShowInterval && (() => {
             this.lastTimeBox = timestamp
             const date = new Date(timestamp)
-            tempList.push({
+            list.push({
                 type: chatType.time,
                 msg: `${('' + date.getFullYear()).substring(2)}.${date.getDate()} ${date.getHours()}:${date.getMinutes()}`,
                 timestamp: timestamp
@@ -65,12 +92,18 @@ class ChatFrame extends React.Component {
         })()
 
         //添加对话消息到消息列表
-        tempList.push({
+        list.push({
             type: type,
             msg: msg,
             timestamp: timestamp
         })
+    }
 
+
+    addChatLabel(type, msg, timestamp) {//向聊天列表增加一条消息
+        const list = this.state.list,
+            tempList = []
+        this.processOneChat(tempList, type, msg, timestamp)
         //更新列表
         //使用array.concat方法构建一个新队列，保证构建的是一个新实例以防止数据突变
         this.setState({

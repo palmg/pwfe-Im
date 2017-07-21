@@ -5,6 +5,7 @@
 import React from 'react'
 import {render} from 'react-dom'
 import Im from '../index'
+import Chat from '../chat'
 import style from './demo.scss'
 import cnTool from 'classnames/bind'
 const cn = cnTool.bind(style)
@@ -77,6 +78,15 @@ class Demo extends React.Component {
                                 onMsg: msg => onMsg(msg)
                             }}/>
                     </div>)
+                case 'static1': //纯静态使用聊天窗口，通过事件设定聊天内容
+                case 'static2':
+                    return (<Chat user={'static1' === state.type ? {
+                        avatar: standard.avatar,
+                        name: standard.name
+                    } : {
+                        avatar: socketIO.user1.avatar,
+                        name: socketIO.user1.name
+                    }} chatList={'static1' === state.type ? staticComp.chatList : staticComp.modifyChatList}/>)
             }
         })() : null
 
@@ -85,6 +95,9 @@ class Demo extends React.Component {
                 <div className={cn('btn-box')}>
                     <button className={cn('btn')} onClick={() => this.popHandle('standard')}>使用标准模式链接</button>
                     <button className={cn('btn')} onClick={() => this.popHandle('socketIo')}>使用socket.id链接</button>
+                    <button className={cn('btn')} onClick={() => this.popHandle('static1')}>静态使用聊天窗口</button>
+                    {'static1' === state.type && (
+                        <button className={cn('btn')} onClick={() => this.popHandle('static2')}>修改数据</button>)}
                 </div>
                 {Comp}
             </div>
@@ -117,15 +130,61 @@ const onSend = (msg, fromId, toId) => {
     return json.content
 }
 
-/**
- * 测试配置
- * @type {{url: string, avatar: string, name: string}}
- */
-const standard = {
+const date = new Date().getTime(),
+    /**
+     *
+     * @type {{chatList: [*]}}
+     */
+    staticComp = {
+        chatList: [{
+            type: 'receive',
+            msg: '第一条消息',
+            timestamp: date
+        }, {
+            type: 'receive',
+            msg: '第二条消息',
+            timestamp: date + 100000
+        }, {
+            type: 'send',
+            msg: '第三条消息',
+            timestamp: date + 200000
+        }, {
+            type: 'receive',
+            msg: '第四条消息',
+            timestamp: date + 300000
+        }],
+        modifyChatList: [{
+            type: 'receive',
+            msg: '第1条消息',
+            timestamp: date
+        }, {
+            type: 'receive',
+            msg: '第2条消息',
+            timestamp: date + 1000000
+        }, {
+            type: 'send',
+            msg: '第3条消息',
+            timestamp: date + 2000000
+        }, {
+            type: 'receive',
+            msg: '第4条消息',
+            timestamp: date + 3000000
+        }, {
+            type: 'receive',
+            msg: '第5条消息',
+            timestamp: date + 4000000
+        }]
+    },
+    /**
+     *
+     * @type {{url: string, avatar: string, name: string}}
+     */
+    standard = {
         url: 'ws://localhost:8181/123456/name/',
         avatar: 'https://file.mahoooo.com/res/file/20170301104952MPDRQN0N2A6QW2L2ZJF6BE995909CE55C7A72876DEE5C6FAE4F5E3@54w_80Q',
         name: '没头脑&不高兴'
     },
+    //
     U = {
         "57515612afd1197c49fd7f50": {
             userName: "fengzt",
