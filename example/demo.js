@@ -9,6 +9,12 @@ import style from './demo.scss'
 import cnTool from 'classnames/bind'
 const cn = cnTool.bind(style)
 
+/**
+ * 用于演示Im工具的组件。
+ * 1）例子同时提供了浏览器源生websocket和socket.io链接的功能。请先启动对应的服务器
+ * 2）源生websocket必须在支持websocket的浏览器上使用。而socket.io会根据需要在http和websocket之间切换。
+ * 3）
+ */
 class Demo extends React.Component {
     constructor(...props) {
         super(...props)
@@ -35,7 +41,7 @@ class Demo extends React.Component {
         const state = this.state
         const Comp = state.type ? (() => {
             switch (state.type) {
-                case 'standard':
+                case 'standard': //标准websocket的方式创建聊天窗口
                     return (<Im user={{
                         avatar: standard.avatar,
                         name: standard.name
@@ -43,7 +49,7 @@ class Demo extends React.Component {
                                 url={standard.url}
                                 type={state.type}
                                 onClose={this.cancelHandle}/>)
-                case 'socketIo':
+                case 'socketIo': //socket.id的方式创建聊天窗口
                     return (<div>
                         <Im user={{
                             avatar: socketIO.user1.avatar,
@@ -86,6 +92,7 @@ class Demo extends React.Component {
     }
 }
 
+//数据转换模板，在组件向服务器发送消息时被调用
 const onSend = (msg, fromId, toId) => {
     return JSON.stringify({
         from: {
@@ -105,7 +112,7 @@ const onSend = (msg, fromId, toId) => {
         resurl: "跳转URL",
         content: msg
     })
-}, onMsg = (msg) => {
+}, onMsg = (msg) => {//数据转换模板，在组件接收到服务器的消息时被调用
     const json = JSON.parse(msg)
     return json.content
 }
