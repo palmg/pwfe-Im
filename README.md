@@ -65,4 +65,4 @@ onClose | 关闭按钮被点击。
 - 首先`npm install` 安装package中的依赖。
 - example中已经简单实现了一个websocket服务 *example/server/index.js*。运行`npm run server`命令即可启动。
 - 服务器启动之后，用webpack运行客户端的demo:`npm run demo`。
-- 浏览器输入 *http://localhost:8080/* 可以看到效果。
+- 浏览器输入 *http://localhost:8080/* 可以看到效果。 
