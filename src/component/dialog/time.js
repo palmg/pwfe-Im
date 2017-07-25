@@ -2,7 +2,6 @@
  * Created by chkui on 2017/7/13.
  */
 import React from 'react'
-const cn = require('classnames/bind').bind(require('./time.scss'))
 /**
  * 时间显示内容
  * @param props {object}
@@ -11,7 +10,12 @@ const cn = require('classnames/bind').bind(require('./time.scss'))
  * }
  * @constructor
  */
-const Time = props=>
-    <p className={cn('time')}>{props.time}</p>
-
+const Time = props =>
+    <p style={s_time}>{props.time}</p>
 export default Time
+const s_time = {
+    textAlign: 'center',
+    fontSize: '.6rem',
+    color: '#999999',
+    margin: '.5rem 0 .2rem 0'
+}

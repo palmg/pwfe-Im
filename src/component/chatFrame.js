@@ -8,7 +8,6 @@ import Dialog from './dialog'
 import Action from './action'
 import Loading from './loading'
 import {chatType, UI, ImState} from '../context'
-const cn = require('classnames/bind').bind(require('./chatFrame.scss'))
 
 /**
  * 聊天窗口。
@@ -50,11 +49,11 @@ class ChatFrame extends React.Component {
             (this.state.list !== nextState.list)
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
         this.props.chatList !== nextProps.chatList && this.setChatList(nextProps.chatList)
     }
 
-    componentDidMount(){
+    componentDidMount() {
         const chatList = this.props.chatList
         chatList && this.setChatList(chatList)
     }
@@ -71,7 +70,7 @@ class ChatFrame extends React.Component {
 
     setChatList(chatList) { //处理外部传入的聊天列表
         const showList = []
-        for(let chat of chatList){
+        for (let chat of chatList) {
             this.processOneChat(showList, chatType[chat.type], chat.msg, chat.timestamp)
         }
         this.setState({
@@ -112,9 +111,10 @@ class ChatFrame extends React.Component {
     }
 
     render() {
-        const {style, className, user, onClose, state} = this.props
+        const {style, className, user, onClose, state} = this.props,
+            s_style = Object.assign({}, style, s_chatFrame)
         return (
-            <div style={style} className={cn('chat-frame', className)}>
+            <div style={s_style} className={className?className:''}>
                 <Title user={user} onClose={onClose}/>
                 <Dialog user={user} chatList={this.state.list}/>
                 <Action onSend={this.sendMsg}/>
@@ -123,5 +123,18 @@ class ChatFrame extends React.Component {
         )
     }
 }
-
+const s_chatFrame = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '18rem',
+    height: '100%',
+    textAlign: 'left',
+    boxShadow: '2px 2px 8px 1px rgba(0, 0, 0, .17)',
+    backgroundColor: '#F8F8F8',
+    boxSizing: 'border-box'
+}
 export default ChatFrame

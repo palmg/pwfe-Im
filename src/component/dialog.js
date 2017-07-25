@@ -7,7 +7,6 @@ import Receive from './dialog/receive'
 import Send from './dialog/send'
 import Time from './dialog/time'
 import {chatType} from '../context'
-const cn = require('classnames/bind').bind(require('./dialog.scss'))
 
 /**
  * 聊天显示框
@@ -23,30 +22,33 @@ const cn = require('classnames/bind').bind(require('./dialog.scss'))
  *      timestamp:消息产生的时间搓
  * }]
  */
-class Dialog extends React.Component{
-    constructor(...props){
+class Dialog extends React.Component {
+    constructor(...props) {
         super(...props)
     }
 
-    shouldComponentUpdate(nextProps){
+    shouldComponentUpdate(nextProps) {
         return this.props.chatList !== nextProps.chatList //只有聊天列表变更时才出现执行比对更新
     }
 
-    componentDidUpdate(prevProps, prevState){ //保持右侧的滚动条一直在最下方
+    componentDidUpdate(prevProps, prevState) { //保持右侧的滚动条一直在最下方
         const {dom} = this
         dom.scrollTop = dom.scrollHeight
     }
 
-    render(){
+    render() {
         const {chatList, user} = this.props
-        return(
-            <div className={cn('dialog')} ref={ref=>{this.dom = ref}}>
-                {chatList && chatList.map(i=>{
-                    switch (i.type){
+        return (
+            <div style={s_dialog} ref={ref => {
+                this.dom = ref
+            }}>
+                {chatList && chatList.map(i => {
+                    switch (i.type) {
                         case chatType.time:
                             return <Time key={`Time${i.timestamp}`} time={i.msg}/>
                         case chatType.receive:
-                            return <Receive key={`Receive${i.timestamp}`} user={user} chat={i.msg} timestamp={i.timestamp} />
+                            return <Receive key={`Receive${i.timestamp}`} user={user} chat={i.msg}
+                                            timestamp={i.timestamp}/>
                         default:
                             return <Send key={`Send${i.timestamp}`} chat={i.msg} timestamp={i.timestamp}/>
                     }
@@ -55,5 +57,9 @@ class Dialog extends React.Component{
         )
     }
 }
-
 export default Dialog
+const s_dialog = {
+    flexGrow: 2,
+    overflowY: 'auto',
+    overflowX: 'hidden'
+}
