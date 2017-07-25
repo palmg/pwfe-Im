@@ -121,7 +121,10 @@ class Im extends React.Component {
         fooList.push(foo)
         !this.timer && (this.timer = setInterval(() => {
             const _f = fooList.shift()
-            _f ? _f() : clearInterval(this.timer)
+            _f ? _f() : (()=>{
+                clearInterval(this.timer)
+                this.timer = false
+            })()
         }, UI.stateProcessTime))
     }
 

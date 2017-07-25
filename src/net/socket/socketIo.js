@@ -30,7 +30,7 @@ const socketIo = (options) => {
                 });
             },
             _close = () => { //关闭链接
-                _socket.close()
+                _socket.on('disconnect', ()=>{})
             },
             _self = {} //对象本身
         _self.connect = () => {
