@@ -85,7 +85,7 @@ class ChatFrame extends React.Component {
             const date = new Date(timestamp)
             list.push({
                 type: chatType.time,
-                msg: `${('' + date.getFullYear()).substring(2)}.${date.getDate()} ${date.getHours()}:${date.getMinutes()}`,
+                msg: `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()} ${date.getHours()}:${processMinutes(date.getMinutes())}`,
                 timestamp: timestamp
             })
         })()
@@ -97,7 +97,6 @@ class ChatFrame extends React.Component {
             timestamp: timestamp
         })
     }
-
 
     addChatLabel(type, msg, timestamp) {//向聊天列表增加一条消息
         const list = this.state.list,
@@ -114,7 +113,7 @@ class ChatFrame extends React.Component {
         const {style, className, user, onClose, state} = this.props,
             s_style = Object.assign({}, style, s_chatFrame)
         return (
-            <div style={s_style} className={className?className:''}>
+            <div style={s_style} className={className ? className : ''}>
                 <Title user={user} onClose={onClose}/>
                 <Dialog user={user} chatList={this.state.list}/>
                 <Action onSend={this.sendMsg}/>
@@ -122,6 +121,14 @@ class ChatFrame extends React.Component {
             </div>
         )
     }
+}
+/**
+ * 处理分钟
+ * @param minutes
+ * @returns {string}
+ */
+const processMinutes = (minutes) => {
+    return 10 > minutes ? '0' + minutes : minutes
 }
 const s_chatFrame = {
     display: 'flex',
