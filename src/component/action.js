@@ -20,8 +20,9 @@ class Action extends React.Component {
     }
 
     sendHandle() {
-        const text = this.text
-        this.props.onSend(this.text.get(), new Date().getTime())
+        const text = this.text,
+            msg = text.get()
+        msg && '' !== msg.replace(/\s+/g, '') && this.props.onSend(msg, new Date().getTime())
         text.clean()
     }
 
