@@ -4,10 +4,11 @@
 
 import React from 'react'
 import {render} from 'react-dom'
-import Im from '../index'
-import Chat from '../chat'
+import Im from '../src/im'
+import Chat from '../src/chat'
 import style from './demo.scss'
 import cnTool from 'classnames/bind'
+
 const cn = cnTool.bind(style)
 
 /**
@@ -80,16 +81,17 @@ class Demo extends React.Component {
                     </div>)
                 case 'static1': //纯静态使用聊天窗口，通过事件设定聊天内容
                 case 'static2':
+                    //TODO by 昕爷，onHistort是触发获取历史消息回调的接口，
                     return (<Chat user={'static1' === state.type ? {
                         avatar: standard.avatar,
                         name: standard.name
                     } : {
                         avatar: socketIO.user1.avatar,
                         name: socketIO.user1.name
-                    }} chatList={'static1' === state.type ? staticComp.chatList : staticComp.modifyChatList}/>)
+                    }} onHistort={historySimulation}
+                                  chatList={'static1' === state.type ? staticComp.chatList : staticComp.modifyChatList}/>)
             }
         })() : null
-
         return (
             <div>
                 <div className={cn('btn-box')}>
@@ -212,6 +214,25 @@ const date = new Date().getTime(),
             avatar: 'https://file.mahoooo.com/res/file/20170301104952MPDRQN0N2A6QW2L2ZJF6BE995909CE55C7A72876DEE5C6FAE4F5E3@54w_80Q',//聊天对象的头像
             name: 'aa' //聊天对象名称
         }
+    },
+    historySimulation = () => {
+        return [{
+            type: 'receive',
+            msg: '聊天啊，造作啊',
+            timestamp: new Date().getTime() - 10000000
+        }, {
+            type: 'send',
+            msg: '聊天啊，造作啊',
+            timestamp: new Date().getTime() - 10001000
+        }, {
+            type: 'send',
+            msg: '聊天啊，造作啊',
+            timestamp: new Date().getTime() - 10002000
+        }, {
+            type: 'receive',
+            msg: '聊天啊，造作啊',
+            timestamp: new Date().getTime() - 10003000
+        }]
     }
-render(<Demo />, document.getElementById('root'))
+render(<Demo/>, document.getElementById('root'))
 

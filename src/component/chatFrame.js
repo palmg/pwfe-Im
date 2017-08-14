@@ -26,6 +26,12 @@ import {chatType, UI, ImState} from '../context'
  * @param {function} send 用于发送消息 send(msg,timestamp),在内部触发
  * @param {function} setOnMsg 用于设置获取消息的回调函数，结构为：
  *  setOnMsg((msg,timestamp)=>{//msg:消息内容，timestamp:时间搓})。
+ * @param {function} onHistory 获取历史消息的处理器，当用户在界面上触发历史消息的事件时，这个接口会被调用
+ *  方法返回的数据就是回调历史数据，结构和chatList类似： ()=>{return [{
+ *      type: ['receive'|'send'] receive表示接受到的消息，send表示本地发送出去的消息
+ *      msg: '' 消息内容
+ *      timestamp: 时间搓
+ *  }]}
  * @param {function} onClose 点击关闭时触发 ()=>{}
  */
 class ChatFrame extends React.Component {
@@ -66,6 +72,14 @@ class ChatFrame extends React.Component {
         const send = this.props.send
         send && send(msg, timestamp)
         this.addChatLabel(chatType.send, msg, timestamp)
+    }
+
+    historyHandle(){
+        //TODO 昕爷，使用这个列表去更新聊天样式
+        const hisList = this.props.onHistory()
+        //TODO this.setState() 使用hisList改变状态，更新历史信息列表
+        //this.processOneChat用于向聊天队列尾部添加聊天消息，可以参考调整向聊天队列队首增加内容
+        //
     }
 
     setChatList(chatList) { //处理外部传入的聊天列表
@@ -112,10 +126,11 @@ class ChatFrame extends React.Component {
     render() {
         const {style, className, user, onClose, state} = this.props,
             s_style = Object.assign({}, style, s_chatFrame)
+        //TODO, 昕爷。onHistory触发historyHandle事件
         return (
             <div style={s_style} className={className ? className : ''}>
                 <Title user={user} onClose={onClose}/>
-                <Dialog user={user} chatList={this.state.list}/>
+                <Dialog user={user} chatList={this.state.list} onHistory={this.historyHandle}/>
                 <Action onSend={this.sendMsg}/>
                 {state !== ImState.connect && <Loading title={state.name}/>}
             </div>

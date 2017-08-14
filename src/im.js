@@ -4,7 +4,7 @@
 
 import React from 'react'
 import ChatFrame from './component/chatFrame'
-import {ImState, disconnect, UI, SocketType} from './context'
+import {disconnect, ImState, SocketType, UI} from './context'
 import {webSocket} from './net/webSocket'
 
 /**
@@ -21,6 +21,12 @@ import {webSocket} from './net/webSocket'
  *                 standard :按照w3c规范实现，使用浏览器底层接口。只能在可支持的浏览器上使用。
  *                 socketIo :使用https://socket.io/实现，对浏览器又更好的兼容性。但是需要后台服务器也是要对应的方案。
  * @param {function} onClose 用户点击关闭按钮。点击关闭按钮是否关闭聊天窗口由业务层决定。{show && <Im />}
+ * @param {function} onHistory 获取历史消息的处理器，当用户在界面上触发历史消息的事件时，这个接口会被调用
+ *  方法返回的数据就是回调历史数据，结构和chatList类似： ()=>{return [{
+ *      type: ['receive'|'send'] receive表示接受到的消息，send表示本地发送出去的消息
+ *      msg: '' 消息内容
+ *      timestamp: 时间搓
+ *  }]}
  * @param {string} channel 链接频道，socket.io用于标记链接频道。需要根据服务器配置
  * @param {object} middleware 用于处理收发消息的中间件。可以在收到会发送消息的时候对消息本身进行处理。结构为{
  *      onSend:(msg)=>{return //}发送消息的中间件，当触发发送消息时该方法会被调用，返回的内容即是发送的消息，必须是字符串。
@@ -121,7 +127,7 @@ class Im extends React.Component {
         fooList.push(foo)
         !this.timer && (this.timer = setInterval(() => {
             const _f = fooList.shift()
-            _f ? _f() : (()=>{
+            _f ? _f() : (() => {
                 clearInterval(this.timer)
                 this.timer = false
             })()
@@ -130,7 +136,8 @@ class Im extends React.Component {
 
     render() {
         const {style, className} = this.props,
-            {stu} = this.state
+            {stu} = this.state,
+            {onHistory, onClose} = this.props
         return (
             <ChatFrame style={style}
                        className={className}
@@ -138,7 +145,8 @@ class Im extends React.Component {
                        user={this.props.user}
                        send={this.sendHandle}
                        setOnMsg={this.setOnMessage}
-                       onClose={this.props.onClose}/>
+                       onHistory={onHistory}
+                       onClose={onClose}/>
         )
     }
 }
@@ -165,7 +173,7 @@ const MsgOptType = {
      */
     executeMsgOpt = (originMsg, modifyMsg, foo) => {
         const type = typeof modifyMsg,
-            opt = (null === modifyMsg || 'undefined' === type || 'boolean' === type) ? (modifyMsg && (()=>{
+            opt = (null === modifyMsg || 'undefined' === type || 'boolean' === type) ? (modifyMsg && (() => {
                 foo(originMsg, new Date().getTime())
             })()) : foo(modifyMsg, new Date().getTime())
     }

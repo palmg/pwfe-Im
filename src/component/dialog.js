@@ -21,6 +21,12 @@ import {chatType} from '../context'
  *      msg:消息内容,
  *      timestamp:消息产生的时间搓
  * }]
+ * @param {function} onHistory 获取历史消息的处理器，当用户在界面上触发历史消息的事件时，这个接口会被调用
+ *  方法返回的数据就是回调历史数据，结构和chatList类似： ()=>{return [{
+ *      type: ['receive'|'send'] receive表示接受到的消息，send表示本地发送出去的消息
+ *      msg: '' 消息内容
+ *      timestamp: 时间搓
+ *  }]}
  */
 class Dialog extends React.Component {
     constructor(...props) {

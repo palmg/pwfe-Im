@@ -23,6 +23,12 @@ import {ImState} from './context'
  * @ {function} send 用于发送消息 send(msg,timestamp),在内部触发
  * @ {function} setOnMsg 用于设置获取消息的回调函数，结构为：
  *  setOnMsg((msg,timestamp)=>{//msg:消息内容，timestamp:时间搓})。
+ * @ {function} onHistory 获取历史消息的处理器，当用户在界面上触发历史消息的事件时，这个接口会被调用
+ *  方法返回的数据就是回调历史数据，结构和chatList类似： ()=>{return [{
+ *      type: ['receive'|'send'] receive表示接受到的消息，send表示本地发送出去的消息
+ *      msg: '' 消息内容
+ *      timestamp: 时间搓
+ *  }]}
  * @ {function} onClose 点击关闭时触发 ()=>{}
  * }
  */
