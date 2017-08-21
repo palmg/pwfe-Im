@@ -81,14 +81,14 @@ class Demo extends React.Component {
                     </div>)
                 case 'static1': //纯静态使用聊天窗口，通过事件设定聊天内容
                 case 'static2':
-                    //TODO by 昕爷，onHistort是触发获取历史消息回调的接口，
+                    //TODO by 昕爷，onHistory是触发获取历史消息回调的接口，
                     return (<Chat user={'static1' === state.type ? {
                         avatar: standard.avatar,
                         name: standard.name
                     } : {
                         avatar: socketIO.user1.avatar,
                         name: socketIO.user1.name
-                    }} onHistort={historySimulation}
+                    }} onHistory={historySimulation}
                                   chatList={'static1' === state.type ? staticComp.chatList : staticComp.modifyChatList}/>)
             }
         })() : null
@@ -159,6 +159,7 @@ const date = new Date().getTime(),
             type: 'receive',
             msg: '第1条消息',
             timestamp: date
+
         }, {
             type: 'receive',
             msg: '第2条消息',
@@ -218,7 +219,7 @@ const date = new Date().getTime(),
     historySimulation = () => {
         return [{
             type: 'receive',
-            msg: '聊天啊，造作啊',
+            msg: '来啊，造作啊',
             timestamp: new Date().getTime() - 10000000
         }, {
             type: 'send',
@@ -226,12 +227,52 @@ const date = new Date().getTime(),
             timestamp: new Date().getTime() - 10001000
         }, {
             type: 'send',
-            msg: '聊天啊，造作啊',
+            msg: 'hh，33',
             timestamp: new Date().getTime() - 10002000
         }, {
             type: 'receive',
-            msg: '聊天啊，造作啊',
+            msg: '你是谁？？',
             timestamp: new Date().getTime() - 10003000
+        }, {
+            type: 'receive',
+            msg: '111？？',
+            timestamp: new Date().getTime() - 10004000
+        }, {
+            type: 'receive',
+            msg: '222？？',
+            timestamp: new Date().getTime() - 10005000
+        }, {
+            type: 'receive',
+            msg: '333？？',
+            timestamp: new Date().getTime() - 10006000
+        }, {
+            type: 'send',
+            msg: '444？？',
+            timestamp: new Date().getTime() - 10007000
+        }, {
+            type: 'send',
+            msg: '555？？',
+            timestamp: new Date().getTime() - 10008000
+        }, {
+            type: 'receive',
+            msg: '666？？',
+            timestamp: new Date().getTime() - 10009000
+        },{
+            type: 'send',
+            msg: '777？？',
+            timestamp: new Date().getTime() - 10010000
+        },{
+            type: 'receive',
+            msg: '888？？',
+            timestamp: new Date().getTime() - 10011000
+        },{
+            type: 'send',
+            msg: '999？？',
+            timestamp: new Date().getTime() - 10012000
+        },{
+            type: 'send',
+                msg: '00000？？',
+                timestamp: new Date().getTime() - 10013000
         }]
     }
 render(<Demo/>, document.getElementById('root'))

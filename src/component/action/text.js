@@ -40,7 +40,7 @@ const s_text = {
     padding: '1rem',
     border: 0,
     width: '100%',
-    height: '70%',
+    height: '100%',
     resize: 'none',
     outline: 'none'
 }

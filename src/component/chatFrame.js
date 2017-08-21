@@ -45,6 +45,8 @@ class ChatFrame extends React.Component {
         this.onMsg = this.onMsg.bind(this) //收到外部消息的回调
         this.sendMsg = this.sendMsg.bind(this) //发送消息给服务器的方法
         params.setOnMsg && params.setOnMsg(this.onMsg)
+        this.historyHandle = this.historyHandle.bind(this);
+        this.setChatList = this.setChatList.bind(this);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -62,13 +64,30 @@ class ChatFrame extends React.Component {
     componentDidMount() {
         const chatList = this.props.chatList
         chatList && this.setChatList(chatList)
+
+        //TODO 陈俊昕
+        //聊天窗口打开，自动显示历史聊天记录（包括离线消息），没有则不显示
+        console.log("显示历史聊天记录")
+        const hisList = this.props.onHistory();
+        let msgList = [];
+        for(let chat of hisList){
+            this.processOneChat(msgList, chatType[chat.type], chat.msg, chat.timestamp)
+        }
+        this.setState({
+            list: msgList.concat(this.state.list)
+        })
+
     }
 
     onMsg(msg, timestamp) {//接收消息
+        console.log("你接收了一条消息")
+
         this.addChatLabel(chatType.receive, msg, timestamp)
     }
 
     sendMsg(msg, timestamp) { //向外发送消息
+        console.log("你发送了一条消息给对方")
+
         const send = this.props.send
         send && send(msg, timestamp)
         this.addChatLabel(chatType.send, msg, timestamp)
@@ -76,7 +95,15 @@ class ChatFrame extends React.Component {
 
     historyHandle(){
         //TODO 昕爷，使用这个列表去更新聊天样式
-        const hisList = this.props.onHistory()
+        const hisList = this.props.onHistory();
+        let msgList = [];
+        for(let chat of hisList){
+            this.processOneChat(msgList, chatType[chat.type], chat.msg, chat.timestamp)
+        }
+        this.setState({
+            list: msgList.concat(this.state.list)
+        })
+
         //TODO this.setState() 使用hisList改变状态，更新历史信息列表
         //this.processOneChat用于向聊天队列尾部添加聊天消息，可以参考调整向聊天队列队首增加内容
         //

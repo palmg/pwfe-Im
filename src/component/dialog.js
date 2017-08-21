@@ -31,6 +31,7 @@ import {chatType} from '../context'
 class Dialog extends React.Component {
     constructor(...props) {
         super(...props)
+        this.handleWheel = this.handleWheel.bind(this);
     }
 
     shouldComponentUpdate(nextProps) {
@@ -38,14 +39,32 @@ class Dialog extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) { //保持右侧的滚动条一直在最下方
-        const {dom} = this
-        dom.scrollTop = dom.scrollHeight
+        //TODO 陈俊昕 判断消息列表的状态是“加载历史记录”还是“发送信息或收到新信息”
+        if(prevProps.chatList[0].msg != this.props.chatList[0].msg){ //加载了历史记录
+            const {dom} = this;
+            dom.scrollTop = 0;
+        }else { //发送了信息或收到了新信息
+            const {dom} = this;
+            dom.scrollTop = dom.scrollHeight;
+        }
+    }
+
+    // TODO 陈俊昕
+    handleWheel(event){ //鼠标滚动监听
+        const {dom} = this;
+        let deta = event.deltaY;
+        if(dom.scrollTop == 0){ //滚动条在顶端时
+            if(deta < 0){ //鼠标向上滚动
+                console.log("加载了一次历史记录");
+                this.props.onHistory();
+            }
+        }
     }
 
     render() {
         const {chatList, user} = this.props
         return (
-            <div style={s_dialog} ref={ref => {
+            <div onWheel={this.handleWheel} style={s_dialog} ref={ref => {
                 this.dom = ref
             }}>
                 {chatList && chatList.map(i => {
@@ -67,5 +86,7 @@ export default Dialog
 const s_dialog = {
     flexGrow: 2,
     overflowY: 'auto',
-    overflowX: 'hidden'
+    overflowX: 'hidden',
+    position: 'relative',
+    paddingTop:'.8rem'
 }

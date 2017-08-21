@@ -20,6 +20,7 @@ class Action extends React.Component {
     }
 
     sendHandle() {
+
         const text = this.text,
             msg = text.get()
         msg && '' !== msg.replace(/\s+/g, '') && this.props.onSend(msg, new Date().getTime())
@@ -32,7 +33,7 @@ class Action extends React.Component {
                 <Text onSend={this.sendHandle} ref={ref => {
                     this.text = ref
                 }}/>
-                <button style={s_send} onClick={this.sendHandle}>发送</button>
+                {/*<button style={s_send} onClick={this.sendHandle}>发送</button>*/}
             </div>
         )
     }
