@@ -27,11 +27,12 @@ import {chatType, UI, ImState} from '../context'
  * @param {function} setOnMsg 用于设置获取消息的回调函数，结构为：
  *  setOnMsg((msg,timestamp)=>{//msg:消息内容，timestamp:时间搓})。
  * @param {function} onHistory 获取历史消息的处理器，当用户在界面上触发历史消息的事件时，这个接口会被调用
- *  方法返回的数据就是回调历史数据，结构和chatList类似： ()=>{return [{
+ *  方法会传入一个callback方法，使用callback方法回传数据，回传的数据结构和chatList类似：
+ *  (call)=>{call([{
  *      type: ['receive'|'send'] receive表示接受到的消息，send表示本地发送出去的消息
  *      msg: '' 消息内容
  *      timestamp: 时间搓
- *  }]}
+ *  }])}
  * @param {function} onClose 点击关闭时触发 ()=>{}
  */
 class ChatFrame extends React.Component {
@@ -47,6 +48,7 @@ class ChatFrame extends React.Component {
         params.setOnMsg && params.setOnMsg(this.onMsg)
         this.historyHandle = this.historyHandle.bind(this);
         this.setChatList = this.setChatList.bind(this);
+        this.historyCallback = this.historyCallback.bind(this)
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -64,18 +66,6 @@ class ChatFrame extends React.Component {
     componentDidMount() {
         const chatList = this.props.chatList
         chatList && this.setChatList(chatList)
-
-        //TODO 陈俊昕
-        //聊天窗口打开，自动显示历史聊天记录（包括离线消息），没有则不显示
-        const hisList = this.props.onHistory();
-        let msgList = [];
-        for(let chat of hisList){
-            this.processOneChat(msgList, chatType[chat.type], chat.msg, chat.timestamp)
-        }
-        this.setState({
-            list: msgList.concat(this.state.list)
-        })
-
     }
 
     onMsg(msg, timestamp) {//接收消息
@@ -88,16 +78,19 @@ class ChatFrame extends React.Component {
         this.addChatLabel(chatType.send, msg, timestamp)
     }
 
-    historyHandle(){
-        //TODO 昕爷，使用这个列表去更新聊天样式
-        const hisList = this.props.onHistory();
+    historyCallback(hisList){
         let msgList = [];
-        for(let chat of hisList){
+        for (let chat of hisList) {
             this.processOneChat(msgList, chatType[chat.type], chat.msg, chat.timestamp)
         }
         this.setState({
             list: msgList.concat(this.state.list)
         })
+    }
+
+    historyHandle() {
+        //TODO 昕爷，使用这个列表去更新聊天样式，现在修改为回调触发
+        this.props.onHistory(this.historyCallback);
 
         //TODO this.setState() 使用hisList改变状态，更新历史信息列表
         //this.processOneChat用于向聊天队列尾部添加聊天消息，可以参考调整向聊天队列队首增加内容
@@ -159,6 +152,7 @@ class ChatFrame extends React.Component {
         )
     }
 }
+
 /**
  * 处理分钟
  * @param minutes

@@ -216,8 +216,8 @@ const date = new Date().getTime(),
             name: 'aa' //聊天对象名称
         }
     },
-    historySimulation = () => {
-        return [{
+    historySimulation = (callback) => {
+        callback([{
             type: 'receive',
             msg: '来啊，造作啊',
             timestamp: new Date().getTime() - 10000000
@@ -273,7 +273,7 @@ const date = new Date().getTime(),
             type: 'send',
                 msg: '00000？？',
                 timestamp: new Date().getTime() - 10013000
-        }]
+        }])
     }
 render(<Demo/>, document.getElementById('root'))
 
