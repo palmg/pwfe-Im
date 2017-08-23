@@ -66,6 +66,7 @@ class ChatFrame extends React.Component {
     componentDidMount() {
         const chatList = this.props.chatList
         chatList && this.setChatList(chatList)
+        //打开窗口就获取历史记录数据
         this.props.onHistory(this.historyCallback);
     }
 
