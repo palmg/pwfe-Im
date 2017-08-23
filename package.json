@@ -1,6 +1,6 @@
 {
   "name": "pwfe-im",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "即时通信工具",
   "main": "index.js",
   "scripts": {
