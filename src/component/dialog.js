@@ -40,7 +40,7 @@ class Dialog extends React.Component {
 
     componentDidUpdate(prevProps, prevState) { //保持右侧的滚动条一直在最下方
         //TODO 陈俊昕 判断消息列表的状态是“加载历史记录”还是“发送信息或收到新信息”
-        if(prevProps.chatList[0] && prevProps.chatList[0].msg != this.props.chatList[0] && this.props.chatList[0].msg){ //加载了历史记录
+        if((prevProps.chatList[0] && prevProps.chatList[0].msg) != (this.props.chatList[0] && this.props.chatList[0].msg)){ //加载了历史记录
             const {dom} = this;
             dom.scrollTop = 0;
         }else { //发送了信息或收到了新信息
