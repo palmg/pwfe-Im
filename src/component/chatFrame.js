@@ -66,6 +66,7 @@ class ChatFrame extends React.Component {
     componentDidMount() {
         const chatList = this.props.chatList
         chatList && this.setChatList(chatList)
+        this.props.onHistory(this.historyCallback);
     }
 
     onMsg(msg, timestamp) {//接收消息
