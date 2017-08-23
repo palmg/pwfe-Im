@@ -67,7 +67,6 @@ class ChatFrame extends React.Component {
 
         //TODO 陈俊昕
         //聊天窗口打开，自动显示历史聊天记录（包括离线消息），没有则不显示
-        console.log("显示历史聊天记录")
         const hisList = this.props.onHistory();
         let msgList = [];
         for(let chat of hisList){
@@ -80,14 +79,10 @@ class ChatFrame extends React.Component {
     }
 
     onMsg(msg, timestamp) {//接收消息
-        console.log("你接收了一条消息")
-
         this.addChatLabel(chatType.receive, msg, timestamp)
     }
 
     sendMsg(msg, timestamp) { //向外发送消息
-        console.log("你发送了一条消息给对方")
-
         const send = this.props.send
         send && send(msg, timestamp)
         this.addChatLabel(chatType.send, msg, timestamp)

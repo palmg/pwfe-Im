@@ -55,7 +55,6 @@ class Dialog extends React.Component {
         let deta = event.deltaY;
         if(dom.scrollTop == 0){ //滚动条在顶端时
             if(deta < 0){ //鼠标向上滚动
-                console.log("加载了一次历史记录");
                 this.props.onHistory();
             }
         }
