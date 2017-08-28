@@ -15,7 +15,7 @@ import React from 'react'
 const Receive = props =>
     <div style={s_receive}>
         <img style={s_avatar} src={props.user.avatar}/>
-        <p style={s_chat}>{props.chat}</p>
+        <p style={s_chat} dangerouslySetInnerHTML={{__html: props.chat}}></p>
         <div style={s_arrow}/>
     </div>
 export default Receive

@@ -14,7 +14,7 @@ import React from 'react'
  */
 const Send = props =>
     <div style={s_send}>
-        <p style={s_chat}>{props.chat}</p>
+        <p style={s_chat} dangerouslySetInnerHTML={{__html: props.chat}}></p>
         <div style={s_arrow}/>
     </div>
 export default Send
