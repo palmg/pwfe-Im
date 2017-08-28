@@ -11,7 +11,7 @@ import React from 'react'
 class Text extends React.Component {
     constructor(...props) {
         super(...props)
-        this.keyUpHandle = this.keyUpHandle.bind(this)
+        this.keyDownHandle = this.keyDownHandle.bind(this)
     }
 
     get() {
@@ -23,7 +23,7 @@ class Text extends React.Component {
         return this
     }
 
-    keyUpHandle(e) {
+    keyDownHandle(e) {
         e && e.keyCode === 13 && this.dom.value && this.props.onSend()
     }
 
@@ -31,7 +31,7 @@ class Text extends React.Component {
         return (
             <textarea style={s_text} ref={ref => {
                 this.dom = ref
-            }} onKeyUp={this.keyUpHandle} placeholder="请输入聊天信息"/>
+            }} onKeyDown={this.keyDownHandle} placeholder="请输入聊天信息"/>
         )
     }
 }
