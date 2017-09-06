@@ -32,6 +32,8 @@ import {webSocket} from './net/webSocket'
  *      onSend:(msg)=>{return //}发送消息的中间件，当触发发送消息时该方法会被调用，返回的内容即是发送的消息，必须是字符串。
  *      onMsg:(msg)=>{return //}收到消息的中间件，需要将信息转换为可用于展示的字符串。
  * } 所有的中间件，返回false表示不执行，返回true表示执行原始消息
+ * @param {function} onFile 上传文件时被触发
+ *  (file, callback) => {file：前端文件对象，callback:文件异步上传成功后的回调.callback(imgSrc, downloadSrc)}
  */
 class Im extends React.Component {
     constructor(...props) {
@@ -137,7 +139,7 @@ class Im extends React.Component {
     render() {
         const {style, className} = this.props,
             {stu} = this.state,
-            {onHistory, onClose} = this.props
+            {onHistory, onClose, onFile} = this.props
         return (
             <ChatFrame style={style}
                        className={className}
@@ -146,6 +148,7 @@ class Im extends React.Component {
                        send={this.sendHandle}
                        setOnMsg={this.setOnMessage}
                        onHistory={onHistory}
+                       onFile={onFile}
                        onClose={onClose}/>
         )
     }

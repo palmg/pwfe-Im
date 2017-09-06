@@ -37,7 +37,7 @@ class Text extends React.Component {
 }
 export default Text
 const s_text = {
-    padding: '1rem',
+    padding: '0 1rem 1rem 1rem',
     border: 0,
     width: '100%',
     height: '100%',

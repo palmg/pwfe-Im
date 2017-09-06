@@ -4,10 +4,12 @@
 
 import React from 'react'
 import Text from './action/text'
+import Bar from './action/bar'
 
 /**
  * 下方的操作框
  * @param {function} onSend:(msg, timestamp)=>{msg:发送的消息，timestamp:时间搓}
+ * @param {function} onFile:(file)=>{file:上传的文件对象}
  */
 class Action extends React.Component {
     constructor(...props) {
@@ -20,7 +22,6 @@ class Action extends React.Component {
     }
 
     sendHandle() {
-
         const text = this.text,
             msg = text.get()
         msg && '' !== msg.replace(/\s+/g, '') && this.props.onSend(msg, new Date().getTime())
@@ -30,6 +31,7 @@ class Action extends React.Component {
     render() {
         return (
             <div style={s_action}>
+                <Bar onFileSelected={this.props.onFile} />
                 <Text onSend={this.sendHandle} ref={ref => {
                     this.text = ref
                 }}/>

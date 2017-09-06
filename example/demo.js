@@ -89,11 +89,17 @@ class Demo extends React.Component {
                         avatar: socketIO.user1.avatar,
                         name: socketIO.user1.name
                     }} onHistory={historySimulation}
-                                  chatList={'static1' === state.type ? staticComp.chatList : staticComp.modifyChatList}/>)
+                                  chatList={'static1' === state.type ? staticComp.chatList : staticComp.modifyChatList}
+                                  onFile={(file,cb)=>{
+                                      console.log(file,cb)
+                                  }}
+                    />)
             }
         })() : null
         return (
             <div>
+                <img src={require('./smile.svg')}/>
+                <img src={require('./folder.svg')}/>
                 <div className={cn('btn-box')}>
                     <button className={cn('btn')} onClick={() => this.popHandle('standard')}>使用标准模式链接</button>
                     <button className={cn('btn')} onClick={() => this.popHandle('socketIo')}>使用socket.id链接</button>

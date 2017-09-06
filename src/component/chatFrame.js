@@ -33,6 +33,8 @@ import {chatType, UI, ImState} from '../context'
  *      msg: '' 消息内容
  *      timestamp: 时间搓
  *  }])}
+ * @param {function} onFile 上传文件时被触发
+ *  (file, callback) => {file：前端文件对象，callback:文件异步上传成功后的回调.callback(imgSrc, downloadSrc)}
  * @param {function} onClose 点击关闭时触发 ()=>{}
  */
 class ChatFrame extends React.Component {
@@ -49,6 +51,7 @@ class ChatFrame extends React.Component {
         this.historyHandle = this.historyHandle.bind(this);
         this.setChatList = this.setChatList.bind(this);
         this.historyCallback = this.historyCallback.bind(this)
+        this.fileHandle = this.fileHandle.bind(this)
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -97,6 +100,13 @@ class ChatFrame extends React.Component {
         //TODO this.setState() 使用hisList改变状态，更新历史信息列表
         //this.processOneChat用于向聊天队列尾部添加聊天消息，可以参考调整向聊天队列队首增加内容
         //
+    }
+
+
+    fileHandle(file){
+        this.props.onFile(file, (imgSrc, downloadSrc)=>{
+            //TODO 添加图片或下载图标
+        })
     }
 
     setChatList(chatList) { //处理外部传入的聊天列表
@@ -148,7 +158,7 @@ class ChatFrame extends React.Component {
             <div style={s_style} className={className ? className : ''}>
                 <Title user={user} onClose={onClose}/>
                 <Dialog user={user} chatList={this.state.list} onHistory={this.historyHandle}/>
-                <Action onSend={this.sendMsg}/>
+                <Action onSend={this.sendMsg} onFile={this.fileHandle}/>
                 {state !== ImState.connect && <Loading title={state.name}/>}
             </div>
         )

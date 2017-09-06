@@ -40,6 +40,9 @@ module.exports = {
                 'sass-loader'
             ]
         }, {
+            test: /\.(png|jpg|svg)$/,
+            use:['url-loader?limit=25000']
+        }, {
             test: /\.html$/,
             use: ['html-loader?minimize=false']
         }]
