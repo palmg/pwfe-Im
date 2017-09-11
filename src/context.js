@@ -35,6 +35,16 @@ export const chatType = {
 }
 
 /**
+ * 聊天信息内容的类型
+ * @type {{text: number, img: number, file: number}}
+ */
+export const msgType = {
+    text: 1, //文本
+    img: 2, //图片
+    file: 3 //文件
+}
+
+/**
  * UI显示效果全局配置
  * @type {{stateProcessTime: number, timeShowInterval: number}}
  */

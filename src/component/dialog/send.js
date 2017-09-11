@@ -3,6 +3,9 @@
  */
 
 import React from 'react'
+import {msgType,chatType} from '../../context'
+import ImgMsg from './imgMsg'
+import FileMsg from './fileMsg'
 /**
  *
  * @param props {object}
@@ -12,11 +15,26 @@ import React from 'react'
  * }
  * @constructor
  */
-const Send = props =>
-    <div style={s_send}>
-        <p style={s_chat} dangerouslySetInnerHTML={{__html: props.chat}}></p>
+const Send = props => {
+    const msg = (() => {
+        let chat = props.chat;
+        try{chat = JSON.parse(chat)}
+        catch(e){}
+        switch (msgType[chat.msgType]) {
+            case msgType.img:
+                return <ImgMsg url={chat.url} type={chatType.send}/>
+            case msgType.file:
+                return <FileMsg url={chat.url} name={chat.name} type={chatType.send}/>
+            case msgType.text:
+            default:
+                return <p style={s_text} dangerouslySetInnerHTML={{__html: chat}}/>
+        }
+    })();
+    return (<div style={s_send}>
+        <div style={s_chat}>{msg}</div>
         <div style={s_arrow}/>
-    </div>
+    </div>)
+}
 export default Send
 const s_send = {
         marginBottom: '.5rem',
@@ -30,7 +48,6 @@ const s_send = {
         margin: 0,
         maxWidth: '14rem',
         wordBreak: 'break-all',
-        padding: '.5rem .8rem',
         background: '#6092E0',
         borderRadius: '3px',
         fontSize: '.6rem',
@@ -39,7 +56,7 @@ const s_send = {
     },
     s_arrow = {
         position: 'absolute',
-        zIndex: 3,
+        zIndex: -1,
         transform: 'rotate(45deg)',
         margin: 'auto',
         top: 0,
@@ -48,4 +65,7 @@ const s_send = {
         width: '.6rem',
         height: '.6rem',
         background: '#6092E0'
+    },
+    s_text = {
+        padding: '0 .8rem',
     }

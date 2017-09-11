@@ -14,7 +14,13 @@ import {chatType, UI, ImState} from '../context'
  * @param {object} state 当前外部加载状态，context.ImState中的所有值。
  * @param {array} chatList 聊天列表，用于在窗口创建只时候就显示聊天内容。结构为:[{
  *      type: ['receive'|'send'] receive表示接受到的消息，send表示本地发送出去的消息
- *      msg: '' 消息内容
+ *      msg: '' 文本格式的消息内容, 或下面的json格式
+ *      msg: '{
+ *          msgType: 消息内容类型 ['file'|'img'|'text'] file表示文件类型的消息，img表示图片类型的消息, text表示文本类型的消息
+ *          text: 文本消息的内容
+ *          url: 图片/文件 的url
+ *          name: 图片/文件 的名称
+ *      }' 消息内容(json格式字符串)
  *      timestamp: 时间搓
  * }]。可以通过重新设定这个列表改变聊天内容，注意数据突变
  * @param {object} user 聊天对象信息:
@@ -30,7 +36,13 @@ import {chatType, UI, ImState} from '../context'
  *  方法会传入一个callback方法，使用callback方法回传数据，回传的数据结构和chatList类似：
  *  (call)=>{call([{
  *      type: ['receive'|'send'] receive表示接受到的消息，send表示本地发送出去的消息
- *      msg: '' 消息内容
+ *      msg: '' 文本格式的消息内容, 或下面的json格式
+ *      msg: '{
+ *          msgType: 消息内容类型 ['file'|'img'|'text'] file表示文件类型的消息，img表示图片类型的消息, text表示文本类型的消息
+ *          text: 文本消息的内容
+ *          url: 图片/文件 的url
+ *          name: 图片/文件 的名称
+ *      }' 消息内容(json格式字符串)
  *      timestamp: 时间搓
  *  }])}
  * @param {function} onFile 上传文件时被触发
@@ -83,7 +95,7 @@ class ChatFrame extends React.Component {
         this.addChatLabel(chatType.send, msg, timestamp)
     }
 
-    historyCallback(hisList){
+    historyCallback(hisList) {
         let msgList = [];
         for (let chat of hisList) {
             this.processOneChat(msgList, chatType[chat.type], chat.msg, chat.timestamp)
@@ -103,9 +115,19 @@ class ChatFrame extends React.Component {
     }
 
 
-    fileHandle(file){
-        this.props.onFile(file, (imgSrc, downloadSrc)=>{
-            //TODO 添加图片或下载图标
+    fileHandle(file) {
+        this.props.onFile(file, (imgSrc, downloadSrc) => {
+            let msg = {}, timestamp = new Date().getTime();
+            imgSrc && (msg = {url: imgSrc, msgType: "img"})
+            downloadSrc && (msg = {
+                url: downloadSrc,
+                name: file.name,
+                msgType: "file"
+            })
+
+            const send = this.props.send
+            send && send(JSON.stringify(msg), timestamp)
+            this.addChatLabel(chatType.send, JSON.stringify(msg), timestamp);
         })
     }
 

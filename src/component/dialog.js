@@ -17,14 +17,26 @@ import {chatType} from '../context'
  *    }
  * @param {array} chatList 聊天的列表信息:
  * [{
- *      type:消息类型,
- *      msg:消息内容,
+ *      type:消息类型,  ['receive'|'send'] receive表示接受到的消息，send表示本地发送出去的消息
+ *      msg: '' 文本格式的消息内容, 或下面的json格式
+ *      msg: '{
+ *          msgType: 消息内容类型 ['file'|'img'|'text'] file表示文件类型的消息，img表示图片类型的消息, text表示文本类型的消息
+ *          text: 文本消息的内容
+ *          url: 图片/文件 的url
+ *          name: 图片/文件 的名称
+ *      }' 消息内容(json格式字符串)
  *      timestamp:消息产生的时间搓
  * }]
  * @param {function} onHistory 获取历史消息的处理器，当用户在界面上触发历史消息的事件时，这个接口会被调用
  *  方法返回的数据就是回调历史数据，结构和chatList类似： ()=>{return [{
  *      type: ['receive'|'send'] receive表示接受到的消息，send表示本地发送出去的消息
- *      msg: '' 消息内容
+ *      msg: '' 文本格式的消息内容, 或下面的json格式
+ *      msg: '{
+ *          msgType: 消息内容类型 ['file'|'img'|'text'] file表示文件类型的消息，img表示图片类型的消息, text表示文本类型的消息
+ *          text: 文本消息的内容
+ *          url: 图片/文件 的url
+ *          name: 图片/文件 的名称
+ *      }' 消息内容(json格式字符串)
  *      timestamp: 时间搓
  *  }]}
  */

@@ -90,9 +90,7 @@ class Demo extends React.Component {
                         name: socketIO.user1.name
                     }} onHistory={historySimulation}
                                   chatList={'static1' === state.type ? staticComp.chatList : staticComp.modifyChatList}
-                                  onFile={(file,cb)=>{
-                                      console.log(file,cb)
-                                  }}
+                                  onFile={onFile}
                     />)
             }
         })() : null
@@ -241,11 +239,11 @@ const date = new Date().getTime(),
             timestamp: new Date().getTime() - 10003000
         }, {
             type: 'receive',
-            msg: '111？？',
+            msg: '{"msgType":"img","url":"https://file.mahoooo.com/res/file/20170905151442WY535N1PBCFZQL63D540633A6CAE9ABA32B83A12A811CD85BF7392@200w_140h"}',
             timestamp: new Date().getTime() - 10004000
         }, {
             type: 'receive',
-            msg: '222？？',
+            msg: '{"msgType":"file","name":"计划书.zip","url":"https://file.mahoooo.com/res/file/20170905151442WY535N1PBCFZQL63D540633A6CAE9ABA32B83A12A811CD85BF7392@200w_140h"}',
             timestamp: new Date().getTime() - 10005000
         }, {
             type: 'receive',
@@ -253,11 +251,11 @@ const date = new Date().getTime(),
             timestamp: new Date().getTime() - 10006000
         }, {
             type: 'send',
-            msg: '444？？',
+            msg: '{"msgType":"img","url":"https://file.mahoooo.com/res/file/20170905151442WY535N1PBCFZQL63D540633A6CAE9ABA32B83A12A811CD85BF7392@200w_140h"}',
             timestamp: new Date().getTime() - 10007000
         }, {
             type: 'send',
-            msg: '555？？',
+            msg: '{"msgType":"file","name":"计划书.jpg","url":"https://file.mahoooo.com/res/file/20170905151442WY535N1PBCFZQL63D540633A6CAE9ABA32B83A12A811CD85BF7392@200w_140h"}',
             timestamp: new Date().getTime() - 10008000
         }, {
             type: 'receive',
@@ -280,6 +278,14 @@ const date = new Date().getTime(),
                 msg: '00000？？',
                 timestamp: new Date().getTime() - 10013000
         }])
+    },
+    onFile = (file,cb)=>{
+        console.log(file);
+        if (file.type.indexOf("image") > -1) {
+            cb("https://file.mahoooo.com/res/file/20170905151442WY535N1PBCFZQL63D540633A6CAE9ABA32B83A12A811CD85BF7392@200w_140h", null)
+        } else {
+            cb(null, "https://file.mahoooo.com/res/file/20170905151442WY535N1PBCFZQL63D540633A6CAE9ABA32B83A12A811CD85BF7392@200w_140h")
+        }
     }
 render(<Demo/>, document.getElementById('root'))
 

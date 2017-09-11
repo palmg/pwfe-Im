@@ -2,6 +2,9 @@
  * Created by chkui on 2017/7/12.
  */
 import React from 'react'
+import {msgType,chatType} from '../../context'
+import ImgMsg from './imgMsg'
+import FileMsg from './fileMsg'
 /**
  * 收取消息的窗口
  * @param props {object}
@@ -12,12 +15,28 @@ import React from 'react'
  * }
  * @constructor
  */
-const Receive = props =>
-    <div style={s_receive}>
+const Receive = props => {
+    const msg = (() => {
+        let chat = props.chat;
+        try{chat = JSON.parse(chat)}
+        catch(e){}
+        switch (msgType[chat.msgType]) {
+            case msgType.img:
+                return <ImgMsg url={chat.url} type={chatType.receive}/>
+            case msgType.file:
+                return <FileMsg url={chat.url} name={chat.name} type={chatType.receive}/>
+            case msgType.text:
+            default:
+                return <p style={s_text} dangerouslySetInnerHTML={{__html: chat}}/>
+        }
+    })();
+
+    return <div style={s_receive}>
         <img style={s_avatar} src={props.user.avatar}/>
-        <p style={s_chat} dangerouslySetInnerHTML={{__html: props.chat}}></p>
+        <div style={s_chat}>{msg}</div>
         <div style={s_arrow}/>
     </div>
+}
 export default Receive
 const s_receive = {
         position: 'relative',
@@ -35,7 +54,6 @@ const s_receive = {
     s_chat = {
         margin: 0,
         maxWidth: '14rem',
-        padding: '.5rem .8rem',
         background: '#FFFFFF',
         border: '1px solid #EEEEEE',
         borderRadius: '3px',
@@ -45,7 +63,7 @@ const s_receive = {
     },
     s_arrow = {
         position: 'absolute',
-        zndex: 3,
+        zIndex: -1,
         transform: 'rotate(45deg)',
         margin: 'auto',
         top: 0,
@@ -56,4 +74,7 @@ const s_receive = {
         background: '#FFFFFF',
         borderLeft: '1px solid #EEEEEE',
         borderBottom: '1px solid #EEEEEE'
+    },
+    s_text = {
+        padding: '0 .8rem',
     }
