@@ -1,6 +1,6 @@
 {
   "name": "pwfe-im",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "即时通信工具",
   "main": "index.js",
   "scripts": {
@@ -39,8 +39,8 @@
     "file-loader": "^0.10.1",
     "html-loader": "^0.4.4",
     "html-webpack-plugin": "^2.24.1",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1",
     "css-loader": "^0.26.0",
     "node-sass": "^4.5.3",
     "postcss-loader": "^1.2.1",
